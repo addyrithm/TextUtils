@@ -37,9 +37,7 @@ export default function TextForm(props) {
     props.showAlert('Cleared!!','success');
   };
   const handleOnCopy = () => {
-    let text = document.getElementById("myBox");
-    text.select();
-    navigator.clipboard.writeText(text.value);
+    navigator.clipboard.writeText(text);
     props.showAlert('Copied!!','success');
   };
 
@@ -47,7 +45,9 @@ export default function TextForm(props) {
   return (
     <>
       <div className="container">
-        <h1>{props.heading}</h1>
+        <div className="conatiner mb-3">
+          <h2 >{props.heading}</h2>
+        </div>
         <textarea
           className="form-control"
           value={text}
@@ -56,36 +56,37 @@ export default function TextForm(props) {
           rows="8"
           style={{backgroundColor : props.mode==='dark'?'#000000':'white', color : props.mode==='dark'?'white':'#000000'}}
         ></textarea>
-        <button className="btn btn-primary my-3" onClick={handleUpClick}>
+        <button disabled={text.length===0} className="btn btn-primary my-3" onClick={handleUpClick}>
           Convert to UpperCase
         </button>
-        <button className="btn btn-primary my-3 mx-2" onClick={handleDownClick}>
+        <button disabled={text.length===0} className="btn btn-primary my-3 mx-2" onClick={handleDownClick}>
           Convert to LowerCase
         </button>
-        <button className="btn btn-primary my-3 mx-2" onClick={handleOnReverse}>
+        <button disabled={text.length===0} className="btn btn-primary my-3 mx-2" onClick={handleOnReverse}>
           Reverse
         </button>
         <button
+          disabled={text.length===0}
           className="btn btn-primary my-3 mx-2"
           onClick={handleOnRemoveSpaces}
         >
           Remove Extra Spaces
         </button>
-        <button className="btn btn-primary my-3 mx-2" onClick={handleOnClear}>
+        <button disabled={text.length===0} className="btn btn-primary my-3 mx-2" onClick={handleOnClear}>
           Clear Text
         </button>
-        <button className="btn btn-primary my-3 mx-2" onClick={handleOnCopy}>
+        <button disabled={text.length===0} className="btn btn-primary my-3 mx-2" onClick={handleOnCopy}>
           Copy Text
         </button>
       </div>
       <div className="conatiner my-3">
         <h2> Your Text Summary</h2>
         <p>
-          {text.split(" ").length - 1} words and {text.length} characters
+          {text.split(/\s+/).filter((element)=>{return element.length!==0}).length} words and {text.length} characters
         </p>
-        <p>{(text.split(" ").length - 1) * 0.008} Minutes to read</p><br />
+        <p>{(text.split(/\s+/).filter((element)=>{return element.length!==0}).length) * 0.008} Minutes to read</p><br />
         <h2>Preview</h2><hr />
-        <p>{text.length>0?text:"Enter something in the above box"}</p>
+        <p>{text.length>0?text:"Nothing to Preview"}</p>
       </div>
     </>
   );
